@@ -1,5 +1,15 @@
 # rtl8812au
 
+
+
+
+!!!!!Importance!!!!!
+debian 9  
+sudo apt install raspberrypi-kernel-headers
+
+
+
+
 Realtek 8812AU/8821AU USB WiFi driver.
 
 for AC1200 (801.11ac) Wireless Dual-Band USB Adapter
@@ -82,3 +92,6 @@ CONFIG_PLATFORM_ARM_RPI = y
 - Vicent Llongo
 - Victor Azizi
 - 赵迤晨 (Zhao, Yichen)
+
+
+
