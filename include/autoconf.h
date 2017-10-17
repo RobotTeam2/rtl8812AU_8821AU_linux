@@ -26,8 +26,8 @@
  * Public  General Config
  */
 #define AUTOCONF_INCLUDED
-#define RTL871X_MODULE_NAME "8812AU"
-#define DRV_NAME "rtl8812au"
+#define RTL871X_MODULE_NAME "8821AU"
+#define DRV_NAME "rtl8821au"
 
 
 #define CONFIG_USB_HCI	1
@@ -36,7 +36,7 @@
 #define PLATFORM_LINUX	1
 
 
-//#define CONFIG_IOCTL_CFG80211 1
+#define CONFIG_IOCTL_CFG80211 1
 
 #ifdef CONFIG_IOCTL_CFG80211
 //#define RTW_USE_CFG80211_STA_EVENT /* Indecate new sta asoc through cfg80211_new_sta */
