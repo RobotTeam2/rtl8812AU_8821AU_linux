@@ -213,14 +213,14 @@ int rtw_qos_opt_enable=0;//0: disable,1:enable
 #endif
 module_param(rtw_qos_opt_enable,int,0644);
 
-char* ifname = "wlan%d";
+char* ifname = "rtl_wlan%d";
 module_param(ifname, charp, 0644);
 MODULE_PARM_DESC(ifname, "The default name to allocate for first interface");
 
 #ifdef CONFIG_PLATFORM_ANDROID
 char* if2name = "p2p%d";
 #else //CONFIG_PLATFORM_ANDROID
-char* if2name = "wlan%d";
+char* if2name = "rtl_wlan%d";
 #endif //CONFIG_PLATFORM_ANDROID
 module_param(if2name, charp, 0644);
 MODULE_PARM_DESC(if2name, "The default name to allocate for second interface");
@@ -2280,7 +2280,7 @@ int rtw_drv_register_netdev(_adapter *if1)
 				else if(padapter->iface_id == IFACE_ID1)
 					name = if1->registrypriv.if2name;
 				else
-					name = "wlan%d";
+					name = "rtl_wlan%d";
 
 				if((status = _rtw_drv_register_netdev(padapter, name)) != _SUCCESS) {
 					break;
