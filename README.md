@@ -10,6 +10,12 @@ sudo apt install raspberrypi-kernel-headers
 
 
 
+sudo modprobe -a rtl8821au  
+
+
+
+
+
 Realtek 8812AU/8821AU USB WiFi driver.
 
 for AC1200 (801.11ac) Wireless Dual-Band USB Adapter
