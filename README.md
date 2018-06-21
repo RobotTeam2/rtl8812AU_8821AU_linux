@@ -11,7 +11,8 @@ sudo apt install raspberrypi-kernel-headers
 
 
 sudo modprobe -a rtl8821au  
-sudo modprobe -a rtl8821au  
+                       
+                       
 
 
 
