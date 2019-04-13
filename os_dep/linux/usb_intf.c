@@ -279,6 +279,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x050D, 0x1106),.driver_info = RTL8812}, /* Belkin - sercomm */
 	{USB_DEVICE(0x050D, 0x1109),.driver_info = RTL8812}, /* Belkin F9L1109 - SerComm */
 	{USB_DEVICE(0x2001, 0x330E),.driver_info = RTL8812}, /* D-Link - ALPHA */
+	{USB_DEVICE(0x2604, 0x0012),.driver_info = RTL8812}, /* Tenda - U12 */
 	{USB_DEVICE(0x7392, 0xA822),.driver_info = RTL8812}, /* Edimax - Edimax */
 	{USB_DEVICE(0x0DF6, 0x0074),.driver_info = RTL8812}, /* Sitecom - Edimax */
 	{USB_DEVICE(0x04BB, 0x0952),.driver_info = RTL8812}, /* I-O DATA - Edimax */
@@ -298,6 +299,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x20F4, 0x805B),.driver_info = RTL8812}, /* TRENDnet - Cameo */
 	{USB_DEVICE(0x2357, 0x0101),.driver_info = RTL8812}, /* TP-Link - Archer T4U */
 	{USB_DEVICE(0x2357, 0x010D),.driver_info = RTL8812}, /* TP-Link - Archer T4U AC1300 */
+        {USB_DEVICE(0x2357, 0x0115),.driver_info = RTL8812}, /* TP-Link - Archer T4U AC1300 */
 	{USB_DEVICE(0x2357, 0x010E),.driver_info = RTL8812}, /* TP-Link - Archer T4UH AC1300 */
 	{USB_DEVICE(0x2357, 0x0103),.driver_info = RTL8812}, /* TP-Link - T4UH */
 	{USB_DEVICE(0x2357, 0x010F),.driver_info = RTL8812}, /* TP-Link - T4UHP */
@@ -327,7 +329,9 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x0411, 0x025D),.driver_info = RTL8821}, /* BUFFALO - WI-U3-866D */
 	{USB_DEVICE(0x0411, 0x029B),.driver_info = RTL8821}, /* BUFFALO - WI-U2-433DHP */
 	{USB_DEVICE(0x056E, 0x4007),.driver_info = RTL8821}, /* ELECOM - WDC-433DU2H */
+	{USB_DEVICE(0x056E, 0x400E),.driver_info = RTL8821}, /* ELECOM - WDC-433SU2M2 */
 	{USB_DEVICE(0x0BDA, 0xA811),.driver_info = RTL8821}, /* Comfast - CF-915AC, CF-916AC */
+	{USB_DEVICE(0x3823, 0x6249),.driver_info = RTL8821}, /* Obihai - OBiWiFi */
 #endif
 
 #ifdef CONFIG_RTL8192E
@@ -1311,17 +1315,9 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	if (rtw_handle_dualmac(padapter, 1) != _SUCCESS)
 		goto free_adapter;
 
-	if((pnetdev = rtw_init_netdev(padapter)) == NULL) {
-		goto handle_dualmac;
-	}
-	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(dvobj));
-	padapter = rtw_netdev_priv(pnetdev);
-
-#ifdef CONFIG_IOCTL_CFG80211
-	if(rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
-		goto handle_dualmac;
-	}
-#endif
+	/* Code used to call rtw_init_netdev here, but MAC has not been probed
+	 * yet, so  moving it lower. --Ben
+	 */
 
 	//step 2. hook HalFunc, allocate HalData
 	//hal_set_hal_ops(padapter);
@@ -1345,6 +1341,19 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 
 	//step read efuse/eeprom data and get mac_addr
 	rtw_hal_read_chip_info(padapter);
+
+	/* Now that we have MAC, init the wiphy and such. --Ben */
+	if((pnetdev = rtw_init_netdev(padapter)) == NULL) {
+		goto handle_dualmac;
+	}
+	SET_NETDEV_DEV(pnetdev, dvobj_to_dev(dvobj));
+	padapter = rtw_netdev_priv(pnetdev);
+
+#ifdef CONFIG_IOCTL_CFG80211
+	if(rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
+		goto handle_dualmac;
+	}
+#endif
 
 	//step 5.
 	if(rtw_init_drv_sw(padapter) ==_FAIL) {

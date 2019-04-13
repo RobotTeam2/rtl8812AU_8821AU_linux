@@ -16,7 +16,6 @@
 #endif
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 7, 0)
-#error LINUX_VERSION_CODE
 #else
 #define ieee80211_band nl80211_band
 #define IEEE80211_BAND_2GHZ NL80211_BAND_2GHZ

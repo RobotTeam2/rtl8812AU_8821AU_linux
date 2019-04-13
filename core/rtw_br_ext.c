@@ -47,12 +47,11 @@
 #ifdef __KERNEL__
 #include <linux/ipv6.h>
 #include <linux/icmpv6.h>
+#include <net/ip6_checksum.h>
 #include <net/ndisc.h>
 #include <net/checksum.h>
 #endif
 #endif
-
-#include <net/ip6_checksum.h>
 
 #ifdef CONFIG_BR_EXT
 

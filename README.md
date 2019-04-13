@@ -1,21 +1,9 @@
 # rtl8812au
 
-
-
-
-!!!!!Importance!!!!!
-debian 9  
+!!!!!Importance!!!!! debian 9
 sudo apt install raspberrypi-kernel-headers
 
-
-
-
-sudo modprobe -a rtl8821au  
-                       
-                       
-
-
-
+sudo modprobe -a rtl8821au
 
 
 Realtek 8812AU/8821AU USB WiFi driver.
@@ -28,6 +16,7 @@ This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl88
 
 ```
 * COMFAST 1200Mbps USB Wireless Adapter(Model: CF-912AC)
+* TP-LINK AC1200 Wireless Dual Band USB Adapter(Model: Archer-T4U)
 ```
 
 ## Compiling with DKMS
@@ -41,7 +30,7 @@ This code is base on version 4.3.14 from https://github.com/diederikdehaas/rtl88
 Install kernel headers and other dependencies.
 
 ```sh
-# sudo apt-get install linux-image-rpi-rpfv linux-headers-rpi-rpfv dkms build-essential bc
+# sudo apt-get install linux-image-rpi-rpfv linux-headers-rpi-rpfv raspberrypi-kernel-headers dkms build-essential bc
 ```
 
 Append following at the end of your ``/boot/config.txt``, reboot your Pi
@@ -64,6 +53,55 @@ CONFIG_PLATFORM_ARM_RPI = y
 # sudo make
 # sudo make install
 # sudo modprobe -a rtl8812au
+```
+
+### Compiling for Ubuntu (16.04)
+
+Download archive into temp directory
+
+```sh
+# mkdir -p /tmp/t4u
+# cd /tmp/t4u
+# wget https://github.com/abperiasamy/rtl8812AU_8821AU_linux/archive/master.zip
+```
+
+Unzip
+
+```sh
+# unzip master.zip
+# cd rtl8812AU_8821AU_linux-master
+```
+
+Compile and install from source
+
+```sh
+# make
+# sudo make install
+```
+
+Load module
+
+```sh
+# sudo modprobe -a rtl8812au
+```
+
+#  Cross-compiling.  You can now specify variables on the command line w/out editing
+#  makefile.  For instance, this builds against recent OpenWRT neo2 platform.  Your
+#  Cross-compile binaries should be in your PATH.
+
+KSRC=/home/greearb/git/openwrt-neo2-dev/build_dir/target-aarch64_cortex-a53_musl/linux-sunxi_cortexa53/linux-4.14.78 EXT_EXTRA_CFLAGS=-DCONFIG_LITTLE_ENDIAN ARCH=arm64 CROSS_COMPILE=aarch64-openwrt-linux- MODDESTDIR=/tmp make V=1
+
+
+Setup DKMS
+
+```sh
+# sudo apt-get update
+# sudo apt-get install dkms
+# cd /tmp/t4u/rtl8812AU_8821AU_linux-master/
+# sudo cp -R . /usr/src/rtl8812AU_8821AU_linux-1.0
+# sudo dkms add -m rtl8812AU_8821AU_linux -v 1.0
+# sudo dkms build -m rtl8812AU_8821AU_linux -v 1.0
+# sudo dkms install -m rtl8812AU_8821AU_linux -v 1.0
 ```
 
 ## Contributors
@@ -100,6 +138,3 @@ CONFIG_PLATFORM_ARM_RPI = y
 - Vicent Llongo
 - Victor Azizi
 - 赵迤晨 (Zhao, Yichen)
-
-
-
